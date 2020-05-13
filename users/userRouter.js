@@ -26,7 +26,7 @@ router.post("/", (req, res) => {
   }
 });
 
-router.post("/:id/posts", (req, res) => {
+router.post("/:id/posts", validatePost, (req, res) => {
   // do your magic!
   // We must first find the user. However, 2 things can happen - the user id exists or not.
   const { id } = req.params;
@@ -156,6 +156,10 @@ router.put("/:id", (req, res) => {
 
 function validateUserId(req, res, next) {
   // do your magic!
+  if (condition) {
+    next();
+  } else {
+  }
 }
 
 function validateUser(req, res, next) {
@@ -164,6 +168,11 @@ function validateUser(req, res, next) {
 
 function validatePost(req, res, next) {
   // do your magic!
+  if (req.body && req.body.text) {
+    next();
+  } else {
+    res.status(404).json({ message: `Some inputs are missing` });
+  }
 }
 
 // expose the router to the outer world
