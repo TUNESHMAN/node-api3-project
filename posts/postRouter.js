@@ -1,5 +1,6 @@
 const express = require('express');
 
+// Creating a Router
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -24,4 +25,5 @@ function validatePostId(req, res, next) {
   // do your magic!
 }
 
+// expose the router to the outer world
 module.exports = router;
