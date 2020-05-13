@@ -8,6 +8,21 @@ const router = express.Router();
 
 router.post("/", (req, res) => {
   // do your magic!
+  const newUser = req.body;
+  if (newUser.name) {
+    users
+      .insert(newUser)
+      .then((user) => {
+        res.status(202).json({ message: `User added successfully` });
+      })
+      .catch((error) => {
+        res
+          .status(500)
+          .json({ message: `The user could not be added to the database` });
+      });
+  } else {
+    res.status(500).json({ message: `Please choose a valid username` });
+  }
 });
 
 router.post("/:id/posts", (req, res) => {

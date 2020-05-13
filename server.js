@@ -2,7 +2,7 @@
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
-const server = express(); //Line 5 gives me access to req.body
+const server = express();
 
 // Here is fleshing out a dummy API
 server.get("/", (req, res) => {
@@ -13,10 +13,10 @@ server.get("/", (req, res) => {
 const userRouter = require("./users/userRouter");
 
 // Here I am using my pre-baked middleware, Cors and helmet
+server.use(express.json()); //Line 16 gives me access to req.body
 server.use(cors());
 server.use(helmet());
-server.use(express.json());
-server.use(userRouter);
+server.use("/users",userRouter);
 //custom middleware
 
 function logger(req, res, next) {}
