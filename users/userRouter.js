@@ -113,6 +113,17 @@ router.delete("/:id", (req, res) => {
 
 router.put("/:id", (req, res) => {
   // do your magic!
+  // Here we need two things - the id of the user to be updated, and the updated user details
+  const { id } = req.params;
+  const replacementUser = req.body;
+  users
+    .update(id, replacementUser)
+    .then((user) => {
+      res.status(200).json(user);
+    })
+    .catch((error) => {
+      res.status(500).message({ message: error.message, stack: error.stack });
+    });
 });
 
 //custom middleware
