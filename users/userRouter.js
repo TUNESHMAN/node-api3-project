@@ -31,17 +31,20 @@ router.post("/:id/posts", (req, res) => {
   // We must first find the user. However, 2 things can happen - the user id exists or not.
   const { id } = req.params;
   const newPost = req.body;
+  newPost.user_id = id;
   users
     .getById(id)
     .then((user) => {
-      if (id) {
+      if (user) {
         posts
           .insert(newPost)
           .then((text) => {
-            console.log(text, newPost);
+            res.status(201).json(text);
           })
           .catch((err) => {
-            console.log(err, newPost);
+            res
+              .status(404)
+              .json({ message: `This post could not be attached to any user` });
           });
       } else {
         res
@@ -50,7 +53,7 @@ router.post("/:id/posts", (req, res) => {
       }
     })
     .catch((error) => {
-      res.status(404).json({ message: `The user with that Id does not exist` });
+      res.status(404).json({ message: error.message, stack: error.stack });
     });
 });
 
@@ -89,6 +92,29 @@ router.get("/:id", (req, res) => {
 
 router.get("/:id/posts", (req, res) => {
   // do your magic!
+  // We must first find the user
+  const { id } = req.params;
+  users
+    .getById(id)
+    .then((user) => {
+      if (user) {
+        posts
+          .getById(id)
+          .then((post) => {
+            res.status(200).json(post);
+          })
+          .catch((error) => {
+            res.status(500).json({ message: `Error getting post` });
+          });
+      } else {
+        res
+          .status(404)
+          .json({ message: `The user with id ${id} was not found` });
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({ message: error.message, stack: error.stack });
+    });
 });
 
 router.delete("/:id", (req, res) => {
