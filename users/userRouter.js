@@ -71,6 +71,20 @@ router.get("/", (req, res) => {
 
 router.get("/:id", (req, res) => {
   // do your magic!
+  // Here, we need the id of the users. Also, the id may exist or not
+  const { id } = req.params;
+  users
+    .getById(id)
+    .then((user) => {
+      if (user) {
+        res.status(200).json(user);
+      } else {
+        res.status(500).json({ message: `User with this id does not exist` });
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({ message: `Error getting this user` });
+    });
 });
 
 router.get("/:id/posts", (req, res) => {
@@ -79,6 +93,22 @@ router.get("/:id/posts", (req, res) => {
 
 router.delete("/:id", (req, res) => {
   // do your magic!
+  // Here the id of the user to be deleted is needed
+  const { id } = req.params;
+  users
+    .remove(id)
+    .then((user) => {
+      if (user) {
+        res
+          .status(301)
+          .json({ message: `User ${id} deleted from the database` });
+      } else {
+        res.status(404).json({ message: `The user with this id not found` });
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({ message: `Error treating this request` });
+    });
 });
 
 router.put("/:id", (req, res) => {
