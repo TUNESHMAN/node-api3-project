@@ -22,6 +22,20 @@ router.get("/", (req, res) => {
 
 router.get("/:id", (req, res) => {
   // do your magic!
+  // Here, we need the id of the post
+  const { id } = req.params;
+  posts
+    .getById(id)
+    .then((post) => {
+      if (post) {
+        res.status(200).json(post);
+      } else {
+        res.status(404).json({ message: `The post ${id} is not found` });
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({ message: error.message, stack: error.stack });
+    });
 });
 
 router.delete("/:id", (req, res) => {
