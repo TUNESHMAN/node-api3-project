@@ -7,23 +7,32 @@ const posts = require("../posts/postDb");
 // Import the router
 const router = express.Router();
 
-router.post("/", (req, res) => {
+router.post("/", validateUser, (req, res) => {
   // do your magic!
   const newUser = req.body;
-  if (newUser.name) {
-    users
-      .insert(newUser)
-      .then((user) => {
-        res.status(202).json({ message: `User added successfully` });
-      })
-      .catch((error) => {
-        res
-          .status(500)
-          .json({ message: `The user could not be added to the database` });
-      });
-  } else {
-    res.status(500).json({ message: `Please choose a valid username` });
-  }
+  users
+    .insert(newUser)
+    .then((user) => {
+      res.status(202).json({ message: `User added successfully` });
+    })
+    .catch((error) => {
+      res.status(500).json({ message: `There was an error adding this user` });
+    });
+  // const newUser = req.body;
+  // if (newUser.name) {
+  //   users
+  //     .insert(newUser)
+  //     .then((user) => {
+  //       res.status(202).json({ message: `User added successfully` });
+  //     })
+  //     .catch((error) => {
+  //       res
+  //         .status(500)
+  //         .json({ message: `The user could not be added to the database` });
+  //     });
+  // } else {
+  //   res.status(500).json({ message: `Please choose a valid username` });
+  // }
 });
 
 router.post("/:id/posts", validatePost, (req, res) => {
@@ -164,11 +173,13 @@ function validateUserId(req, res, next) {
 
 function validateUser(req, res, next) {
   // do your magic!
-  if (!req.body) {
-    res.status
-    
+  const newUser = req.body;
+  if (!newUser) {
+    res.status(404).json({ message: `No user info entered` });
+  } else if (!newUser.name) {
+    res.status(404).json({ message: `username field is missing` });
   } else {
-    
+    next();
   }
 }
 
