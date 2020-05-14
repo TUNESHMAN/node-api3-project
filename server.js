@@ -11,8 +11,8 @@ const postRouter = require("./posts/postRouter");
 server.use(express.json()); //Line 16 gives me access to req.body
 server.use(cors());
 server.use(helmet());
-server.use("/users", logger, userRouter);
-server.use("/posts", logger, postRouter);
+server.use("/users", userRouter, logger);
+server.use("/posts", postRouter, logger);
 
 // Here is fleshing out a dummy API
 server.get("/", (req, res) => {

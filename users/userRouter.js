@@ -13,26 +13,11 @@ router.post("/", validateUser, (req, res) => {
   users
     .insert(newUser)
     .then((user) => {
-      res.status(202).json({ message: `User ${user} added successfully` });
+      res.status(202).json({ message: `User ${user.name} added successfully` });
     })
     .catch((error) => {
       res.status(500).json({ message: `There was an error adding this user` });
     });
-  // const newUser = req.body;
-  // if (newUser.name) {
-  //   users
-  //     .insert(newUser)
-  //     .then((user) => {
-  //       res.status(202).json({ message: `User added successfully` });
-  //     })
-  //     .catch((error) => {
-  //       res
-  //         .status(500)
-  //         .json({ message: `The user could not be added to the database` });
-  //     });
-  // } else {
-  //   res.status(500).json({ message: `Please choose a valid username` });
-  // }
 });
 
 router.post("/:id/posts", validatePost, (req, res) => {
@@ -161,22 +146,24 @@ router.put("/:id", (req, res) => {
     });
 });
 
-//custom middleware
+// custom middleware
 
-// function validateUserId(req, res, next) {
-//   // do your magic!
-//   if (condition) {
-//     next();
-//   } else {
-//   }
-// }
+function validateUserId(req, res, next) {
+  // do your magic!
+  const userId = req.params;
+
+  if (condition) {
+    next();
+  } else {
+  }
+}
 
 function validateUser(req, res, next) {
   // do your magic!
   const newUser = req.body;
-  if (!newUser) {
+  if (Object.keys(newUser).length === 0) {
     res.status(404).json({ message: `No user info entered` });
-  } else if (!newUser.name) {
+  } else if (newUser.name === "") {
     res.status(404).json({ message: `username field is missing` });
   } else {
     next();
