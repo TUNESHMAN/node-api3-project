@@ -13,7 +13,7 @@ router.post("/", validateUser, (req, res) => {
   users
     .insert(newUser)
     .then((user) => {
-      res.status(202).json({ message: `User added successfully` });
+      res.status(202).json({ message: `User ${user} added successfully` });
     })
     .catch((error) => {
       res.status(500).json({ message: `There was an error adding this user` });
@@ -163,13 +163,13 @@ router.put("/:id", (req, res) => {
 
 //custom middleware
 
-function validateUserId(req, res, next) {
-  // do your magic!
-  if (condition) {
-    next();
-  } else {
-  }
-}
+// function validateUserId(req, res, next) {
+//   // do your magic!
+//   if (condition) {
+//     next();
+//   } else {
+//   }
+// }
 
 function validateUser(req, res, next) {
   // do your magic!
