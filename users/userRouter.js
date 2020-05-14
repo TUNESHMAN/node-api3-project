@@ -164,6 +164,12 @@ function validateUserId(req, res, next) {
 
 function validateUser(req, res, next) {
   // do your magic!
+  if (!req.body) {
+    res.status
+    
+  } else {
+    
+  }
 }
 
 function validatePost(req, res, next) {

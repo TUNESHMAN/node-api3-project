@@ -11,8 +11,8 @@ const postRouter = require("./posts/postRouter");
 server.use(express.json()); //Line 16 gives me access to req.body
 server.use(cors());
 server.use(helmet());
-server.use("/users", userRouter);
-server.use("/posts", postRouter);
+server.use("/users", logger, userRouter);
+server.use("/posts", logger, postRouter);
 
 // Here is fleshing out a dummy API
 server.get("/", (req, res) => {
@@ -22,7 +22,11 @@ server.get("/", (req, res) => {
 //custom middleware
 
 function logger(req, res, next) {
-  
+  console.log(
+    `[${new Date().toISOString()}] ${req.method} to ${req.url} from ${req.get(
+      "origin"
+    )}`
+  );
 }
 
 server.get("*", (req, res) => {
