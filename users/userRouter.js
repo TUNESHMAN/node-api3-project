@@ -66,22 +66,9 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", validateUserId, (req, res) => {
   // do your magic!
   // Here, we need the id of the users. Also, the id may exist or not
-  const { id } = req.params;
-  users
-    .getById(id)
-    .then((user) => {
-      if (user) {
-        res.status(200).json(user);
-      } else {
-        res.status(500).json({ message: `User with this id does not exist` });
-      }
-    })
-    .catch((error) => {
-      res.status(500).json({ message: `Error getting this user` });
-    });
 });
 
 router.get("/:id/posts", (req, res) => {
@@ -150,12 +137,21 @@ router.put("/:id", (req, res) => {
 
 function validateUserId(req, res, next) {
   // do your magic!
-  const userId = req.params;
-
-  if (condition) {
-    next();
-  } else {
-  }
+  const { id } = req.params;
+  users
+    .getById(id)
+    .then((user) => {
+      if (user) {
+        res.status(200).json(user);
+      } else if (!user) {
+        res.status(500).json({ message: `User with this id does not exist` });
+      } else {
+        next();
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({ message: `Error getting this user` });
+    });
 }
 
 function validateUser(req, res, next) {
